@@ -101,9 +101,10 @@ if CLIENT then
 
 	local icon_armor = Material("vgui/ttt/hud_armor")
 	local icon_armor_rei = Material("vgui/ttt/hud_armor_reinforced")
-	local icon_ammo = Material("vgui/ttt/hud_ammo")
-	local icon_health = Material("vgui/ttt/hud_health")
-	local icon_sprint = Material("vgui/ttt/hud_sprint")
+	
+	local icon_ammo = Material("vgui/ttt/acrylic/hud_ammo")
+	local icon_health = Material("vgui/ttt/acrylic/hud_health")
+	local icon_sprint = Material("vgui/ttt/acrylic/hud_sprint")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
@@ -213,7 +214,7 @@ if CLIENT then
 				self:DrawLines(sprint_x, sprint_y, sprint_w, sprint_h)
 
 				draw.FilteredShadowedTexture(sprint_x + icon_pad, sprint_y + icon_pad, icon_size, icon_size, icon_sprint, 255, COLOR_WHITE, self.scale)
-				draw.AdvancedText(string.format("%03i", client.sprintProgress * 100) .. "%", "AcrylicBar", sprint_x + sprint_h, sprint_y + 0.5 * sprint_h, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+				draw.AdvancedText(string.format("%03i", client:GetSprintStamina() * 100) .. "%", "AcrylicBar", sprint_x + sprint_h, sprint_y + 0.5 * sprint_h, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 			end
 		else
 			-- precalc sizes

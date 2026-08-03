@@ -1,6 +1,6 @@
 "UnlitGeneric"
 {
-	"$basetexture" "vgui/ttt/hud_ammo"
+	"$basetexture" "vgui/ttt/acrylic/hud_drowning"
 	"$nocull" 1
 	"$nodecal" 1
 	"$nolod" 1

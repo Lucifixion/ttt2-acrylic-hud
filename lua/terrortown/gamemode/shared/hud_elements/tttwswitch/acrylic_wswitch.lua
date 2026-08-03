@@ -38,6 +38,21 @@ if CLIENT then
 		BaseClass.Initialize(self)
 	end
 
+    function HUDELEMENT:GetSavingKeys()
+        local savingKeys = BaseClass.GetSavingKeys(self) or {}
+        savingKeys.persistentWeaponSelect = {
+            typ = "bool",
+            desc = "label_hud_persistent_weapon_select_enable",
+            default = false,
+            OnChange = function(slf, bool)
+                slf:PerformLayout()
+                slf:SaveData()
+            end,
+        }
+
+        return table.Copy(savingKeys)
+    end
+
 	function HUDELEMENT:GetDefaults()
 		const_defaults["basepos"] = {x = ScrW() - (self.size.w + self.margin * 2), y = ScrH() - self.margin}
 
@@ -124,7 +139,7 @@ if CLIENT then
 	end
 
 	function HUDELEMENT:ShouldDraw()
-		return HUDEditor.IsEditing or WSWITCH.Show
+		return HUDEditor.IsEditing or WSWITCH.Show or self.persistentWeaponSelect
 	end
 
 	function HUDELEMENT:Draw()

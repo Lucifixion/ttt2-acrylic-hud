@@ -24,7 +24,7 @@ if CLIENT then
 	-- parameter overwrites end
 
 	function HUDELEMENT:GetDefaults()
-		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.padding - self.size.h}
+		const_defaults["basepos"] = {x = math.Round(ScrW() * 0.5 - self.size.w * 0.5), y = ScrH() - self.padding - self.size.h - (ScrH() * 0.1)}
 
 		return const_defaults
 	end
@@ -42,7 +42,7 @@ if CLIENT then
 		BaseClass.PerformLayout(self)
 	end
 
-	local icon_drowning = Material("vgui/ttt/hud_drowning")
+	local icon_drowning = Material("vgui/ttt/acrylic/hud_drowning")
 
 	function HUDELEMENT:Draw()
 		local client = LocalPlayer()
