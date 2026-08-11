@@ -7,7 +7,7 @@ surface.CreateAdvancedFont("AcrylicRole", {font = "Octin Sports RG", size = 28, 
 surface.CreateAdvancedFont("AcrylicBar", {font = "Octin Sports RG", size = 20, weight = 300})
 surface.CreateAdvancedFont("AcrylicWep", {font = "Octin Sports RG", size = 21, weight = 900})
 surface.CreateAdvancedFont("AcrylicWepNum", {font = "Octin Sports RG", size = 21, weight = 600})
-surface.CreateAdvancedFont("AcrylicItemInfo", {font = "Octin Sports RG", size = 14, weight = 600})
+surface.CreateAdvancedFont("AcrylicItemInfo", {font = "Octin Sports RG", size = 14, weight = 300})
 
 local base = "scalable_hud"
 
