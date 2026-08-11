@@ -25,6 +25,21 @@ if CLIENT then
 		BaseClass.Initialize(self)
 	end
 
+    function HUDELEMENT:GetSavingKeys()
+        local savingKeys = BaseClass.GetSavingKeys(self) or {}
+        savingKeys.usePlayerAvatar = {
+            typ = "bool",
+            desc = "label_hud_use_player_avatar",
+            default = false,
+            OnChange = function(slf, bool)
+                slf:PerformLayout()
+                slf:SaveData()
+            end,
+        }
+
+        return table.Copy(savingKeys)
+    end
+
 	-- parameter overwrites
 	function HUDELEMENT:IsResizable()
 		return true, true
@@ -114,7 +129,9 @@ if CLIENT then
 		local calive = client:Alive() and client:IsTerror()
 		local cactive = client:IsActive()
 		local cspec = IsValid(tgt) and tgt:IsPlayer()
-		local sprint_enabled = GetGlobalBool("ttt2_sprint_enabled", true)
+
+		local armor_enabled = GetGlobalBool("ttt_armor_dynamic", true) and client:GetArmor() > 0
+		local sprint_enabled = SPRINT.convars.enabled:GetBool()
 
 		local c, text
 
@@ -138,7 +155,7 @@ if CLIENT then
 
 			local health_x = self.pos.x
 			local health_y = self.pos.y + self.row + self.gap
-			local health_w = (self.size.w - self.gap) * 0.5
+			local health_w = armor_enabled and ((self.size.w - self.gap) * 0.5) or self.size.w
 			local health_h = self.row
 
 			local armor_x = self.pos.x + health_w + self.gap
@@ -151,7 +168,6 @@ if CLIENT then
 			local ammo_w = sprint_enabled and ((self.size.w - self.gap) * 0.5) or self.size.w
 			local ammo_h = self.row
 
-			-- TODO dependant on GetGlobalBool("ttt2_sprint_enabled", true)
 			local sprint_x = self.pos.x + ammo_w + self.gap
 			local sprint_y = self.pos.y + 2 * (self.row + self.gap)
 			local sprint_w = (self.size.w - self.gap) * 0.5
@@ -183,13 +199,15 @@ if CLIENT then
 			draw.AdvancedText(math.max(0, client:Health()) .. " / " .. math.max(0, client:GetMaxHealth()), "AcrylicBar", health_x + health_h, health_y + 0.5 * health_h, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 
 			-- draw armor box
-			self:DrawBg(armor_x, armor_y, armor_w, armor_h, self.basecolor)
-			self:DrawLines(armor_x, armor_y, armor_w, armor_h)
+			if armor_enabled then
+				self:DrawBg(armor_x, armor_y, armor_w, armor_h, self.basecolor)
+				self:DrawLines(armor_x, armor_y, armor_w, armor_h)
 
-			local icon_mat = client:ArmorIsReinforced() and icon_armor_rei or icon_armor
+				local icon_mat = client:ArmorIsReinforced() and icon_armor_rei or icon_armor
 
-			draw.FilteredShadowedTexture(armor_x + icon_pad, armor_y + icon_pad, icon_size, icon_size, icon_mat, 255, COLOR_WHITE, self.scale)
-			draw.AdvancedText(client:GetArmor() .. " / " .. client:GetMaxArmor(), "AcrylicBar", armor_x + armor_h, armor_y + 0.5 * armor_h, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+				draw.FilteredShadowedTexture(armor_x + icon_pad, armor_y + icon_pad, icon_size, icon_size, icon_mat, 255, COLOR_WHITE, self.scale)
+				draw.AdvancedText(client:GetArmor() .. " / " .. client:GetMaxArmor(), "AcrylicBar", armor_x + armor_h, armor_y + 0.5 * armor_h, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+			end
 
 			-- draw ammo box
 			self:DrawBg(ammo_x, ammo_y, ammo_w, ammo_h, self.basecolor)
@@ -229,7 +247,11 @@ if CLIENT then
 			self:DrawLines(box_x, box_y, box_w, box_h)
 
 			if cspec then
-				draw.FilteredShadowedTexture(box_x + self.gap, box_y + self.gap, img_size, img_size, watching_icon, 255, COLOR_WHITE, self.scale)
+				if not self.usePlayerAvatar then
+					draw.FilteredShadowedTexture(box_x + self.gap, box_y + self.gap, img_size, img_size, watching_icon, 255, COLOR_WHITE, self.scale)
+				else
+					draw.SteamAvatar(tgt:SteamID64(), "large", box_x + self.gap, box_y + self.gap, img_size, img_size, COLOR_WHITE, 0.0, 0.0)
+				end
 			end
 
 			draw.AdvancedText(text, "AcrylicRole", box_x + (cspec and box_h or 2 * self.gap), box_y + 0.5 * box_h, COLOR_WHITE, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
