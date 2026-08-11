@@ -51,7 +51,7 @@ if CLIENT then -- CLIENT
 		self:DrawBg(x, y, w, h, self.basecolor)
 		self:DrawLines(x, y, w, h)
 
-		draw.AdvancedText(name, "OctagonalBar", x + self.iconSize + self.padding + 4, y + h * 0.5, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
+		draw.AdvancedText(name, "AcrylicBar", x + self.iconSize + self.padding + 4, y + h * 0.5, util.GetDefaultColor(self.basecolor), TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER, true, self.scale)
 
 		local nSize = self.iconSize - 6
 
