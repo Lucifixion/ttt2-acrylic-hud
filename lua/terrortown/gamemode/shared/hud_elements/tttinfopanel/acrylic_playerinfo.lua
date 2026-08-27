@@ -19,7 +19,6 @@ if CLIENT then
 	function HUDELEMENT:Initialize()
 		self.scale = 1.0
 		self.basecolor = self:GetHUDBasecolor()
-		self.sri_text_width_padding = sri_text_width_padding
 		--self.secondaryRoleInformationFunc = nil
 
 		BaseClass.Initialize(self)
@@ -100,8 +99,28 @@ if CLIENT then
 			if secInfoTbl and secInfoTbl.text then
 				surface.SetFont("AcrylicBar")
 
-				local sri_text_width = surface.GetTextSize(string.upper(secInfoTbl.text)) * self.scale
-				local sri_width = sri_text_width + self.padding * 2
+				local sri_text_width = surface.GetTextSize(secInfoTbl.text) * self.scale
+
+				local sri_width = sri_text_width + (self.padding * 2)
+				local sri_height = self.row - (self.padding * 2)
+
+				local sri_x = self.pos.x + self.size.w - self.padding - sri_width
+				local sri_y = self.pos.y + self.padding
+
+				self:DrawBg(sri_x, sri_y, sri_width, sri_height, ColorAlpha(self.basecolor, 120))
+				self:DrawSimpleOutline(sri_x, sri_y, sri_width, sri_height)
+				
+				draw.AdvancedText(
+					secInfoTbl.text,
+					"AcrylicBar",
+					sri_x + sri_width * 0.5,
+					sri_y + sri_height * 0.5,
+					util.GetDefaultColor(secInfoTbl.color),
+					TEXT_ALIGN_CENTER,
+					TEXT_ALIGN_CENTER,
+					true,
+					self.scale
+				)
 
 				role_scale_multiplier = (self.size.w - self.row - 4 * self.padding - sri_width) / role_text_width
 			end
